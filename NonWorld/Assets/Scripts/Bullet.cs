@@ -5,15 +5,20 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 	public GameObject hitEffect;
-	private void OnCollisionEnter2D(Collision2D collision)
-	{
-		if (collision.gameObject.CompareTag("Enemy"))
+	[SerializeField]float bulletDamage;
+	float modifyBulletDamage;
+
+    public float ModifyBulletDamage { get => modifyBulletDamage; set => modifyBulletDamage = value; }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+		if (other.gameObject.CompareTag("Enemy"))
 		{
 			GameObject effect = Instantiate(hitEffect,transform.position, Quaternion.identity);
+			other.gameObject.GetComponent<Enemy>().TakeDamage(bulletDamage + ModifyBulletDamage);
 			Destroy(effect,.5f);
 			Destroy(this.gameObject);
 		}
-		if (collision.gameObject.CompareTag("Walls"))
+		if (other.gameObject.CompareTag("Walls"))
 		{
 			Destroy(this.gameObject);
 		}

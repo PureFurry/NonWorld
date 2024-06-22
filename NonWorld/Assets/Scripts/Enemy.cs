@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour,IMove,ITakeDamage
 {
-    [SerializeField]public GameObject[] enemyPool;
+    [SerializeField] Entity entityData;
     [SerializeField] float health, currentHealth;
     // [SerializeField] LayerMask targetLayerMask;
     [SerializeField]private float enemyMoveSpeed;
     GameObject targetPosition;
     [SerializeField]private float damage;
     [SerializeField]private int droppedLevelPoint;
-    bool lookingLeft = true;
+    Rigidbody2D rb;
 
 
     //Enemy Follow Function
@@ -21,17 +21,29 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
         Vector3 displacement = inputVector -transform.position;
 	    displacement = displacement.normalized;
 
-	    if (Vector2.Distance (inputVector, transform.position) > 1.0f) {
-		    transform.position += (displacement * enemyMoveSpeed * Time.deltaTime);
+        rb.velocity = displacement * enemyMoveSpeed;
+        
+
+	    // if (Vector2.Distance (inputVector, transform.position) > 1.0f) {
+		//     transform.position += (displacement * enemyMoveSpeed * Time.deltaTime);
                  
-	    }else{
-               //do whatever the enemy has to do with the player
-        }
+	    // }else{
+        //        //do whatever the enemy has to do with the player
+        // }
+    }
+    void RotatingToPlayer(){
+        Vector2 lookDir = new Vector2(targetPosition.transform.position.x, targetPosition.transform.position.y) - rb.position;
+		float angle = Mathf.Atan2(lookDir.y,lookDir.x) * Mathf.Rad2Deg - 90f;
+		rb.rotation = angle;
     }
 
 
     private void Awake() {
-        currentHealth = health;
+        currentHealth = entityData.entityHealth;
+        enemyMoveSpeed = entityData.entitySpeed;
+    }
+    private void Start() {
+        rb = GetComponent<Rigidbody2D>();
     }
 
 
@@ -39,21 +51,6 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
     void Update()
     {
         SearchTarget();
-
-        if (targetPosition.transform.position.x < this.transform.position.x && !lookingLeft)
-        {
-            Quaternion tempRotation = this.transform.localRotation;
-            tempRotation.y = 0;
-            this.transform.localRotation = tempRotation;
-            lookingLeft = true;
-        }
-        if (targetPosition.transform.position.x > this.transform.position.x && lookingLeft)
-        {
-            Quaternion tempRotation = this.transform.localRotation;
-            tempRotation.y = -180;
-            this.transform.localRotation = tempRotation;
-            lookingLeft = false;
-        }
     }
     void SearchTarget(){
         targetPosition = GameObject.FindGameObjectWithTag("Player");
@@ -61,6 +58,7 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
         if (targetPosition != null)
         {
             Move(targetPosition.transform.position);
+            RotatingToPlayer();
         }
     }
     private void OnCollisionEnter2D(Collision2D other) {
@@ -74,11 +72,15 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
+            GameManager.Instance.CurroptionCore += entityData.droppedCorrption;
+            UIManager.Instance.UpdateCorruption(GameManager.Instance.CurroptionCore);
             Destroy(this.gameObject);
         }
     }
 
-    
-
+    public void Move(Vector2 inputVector)
+    {
+        throw new System.NotImplementedException();
+    }
 
 }

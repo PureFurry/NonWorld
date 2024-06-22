@@ -1,6 +1,6 @@
+
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Shooting : MonoBehaviour
@@ -11,7 +11,7 @@ public class Shooting : MonoBehaviour
 	[SerializeField]public GameObject bulletPrefab;
 	[SerializeField]int currentMagazineSize;
 	[SerializeField]float currentTimeBetweenShot;
-	[SerializeField]bool canFire = true;
+	[SerializeField]bool canFire = true,canReload = true;
 
 	public float bulletForce = 20f;
 	private void Start() {
@@ -42,16 +42,17 @@ public class Shooting : MonoBehaviour
 			break;
 		}
 		
-		if (Input.GetKeyDown(KeyCode.R))
+		if (Input.GetKeyDown(KeyCode.R) && canFire && canReload)
 		{
-			ReloadMagazine();
+			StartCoroutine(ReloadMagazine());
 		}
-		
 	}
 	//Shoot Function
 	void Shoot()
 	{
-		CameraFollow.Instance.Shake();
+		GetComponentInParent<PlayerMovement>().CanMove = false;
+		//ateş ettiğinde ekranın sallanması
+		StartCoroutine(CameraFollow.Instance.Shake(0.1f,0.1f));
 		//shot bullet count for tap
 		for (int i = 0; i < weaponSO.weaponBulletPerTaps; i++)
 		{
@@ -61,6 +62,7 @@ public class Shooting : MonoBehaviour
 			currentMagazineSize--;
 			ResetShotTime();
 		}
+		GetComponentInParent<PlayerMovement>().CanMove = true;
 	}
 	void ResetShotTime(){
 		canFire = false;
@@ -77,7 +79,16 @@ public class Shooting : MonoBehaviour
 	public void LoadGunData(WeaponSO _weaponData){
 		weaponSO = _weaponData;
 	}
-	void ReloadMagazine(){
+	IEnumerator ReloadMagazine(){
+		canFire = false;
+		canReload = false;
+		GetComponentInParent<PlayerMovement>().CanMove=false;
 		currentMagazineSize = weaponSO.weaponMagazineSize;
+		GetComponentInParent<Animator>().SetTrigger("Reload");
+		yield return new WaitForSeconds(GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).length + GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime);
+		canFire = true;
+		canReload = true;
+		GetComponentInParent<PlayerMovement>().CanMove=true;
 	}
+
 }

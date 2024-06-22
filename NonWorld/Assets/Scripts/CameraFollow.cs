@@ -15,12 +15,8 @@ public class CameraFollow : MonoBehaviour
     public Vector3 offset; // Kamera ve hedef aras�ndaki ba�lang�� mesafesi
 
 
-    // How long the object should shake for.
-	public float shakeDuration = 0f;
-	
-	// Amplitude of the shake. A larger value shakes the camera harder.
-	public float shakeAmount = 0.7f;
-	public float decreaseFactor = 1.0f;
+    Vector3 desiredPosition;
+    Vector3 smoothedPosition;
 
     private void Start()
     {
@@ -30,9 +26,8 @@ public class CameraFollow : MonoBehaviour
     {
         if (target != null)
         {
-            Vector3 desiredPosition = target.position + offset;
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-            transform.position = smoothedPosition;
+            
+            transform.position = SetCamPosition();
         }
         else
         {
@@ -42,17 +37,31 @@ public class CameraFollow : MonoBehaviour
     private void Update() {
         
     }
-    public void Shake(){
-        if (shakeDuration > 0)
-		{
-			transform.localPosition = offset + Random.insideUnitSphere * shakeAmount;
-			
-			shakeDuration -= Time.deltaTime * decreaseFactor;
-		}
-		else
-		{
-			shakeDuration = 0f;
-			transform.localPosition = offset;
-		}
+    public IEnumerator Shake(float duration, float magnitude)
+    {
+        /* you can set the originalPos to transform.localPosition of the camera in that instance. */
+        Vector3 originalPos = smoothedPosition;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float xOffset = Random.Range(-0.5f,0.5f) * magnitude;
+            float yOffset = Random.Range(-0.5f,0.5f) * magnitude;
+
+            transform.localPosition = new Vector3(target.position.x + xOffset,target.position.y + yOffset, SetCamPosition().z);
+
+            elapsedTime += Time.deltaTime;
+
+            // wait one frame
+            yield return null;
+        }
+
+        transform.localPosition = smoothedPosition;
+    }
+    Vector3 SetCamPosition(){
+            desiredPosition = target.position + offset;
+            smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            return smoothedPosition;
     }
 }

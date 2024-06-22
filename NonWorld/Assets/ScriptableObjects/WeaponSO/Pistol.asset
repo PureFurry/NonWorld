@@ -17,9 +17,10 @@ MonoBehaviour:
   weaponBullet: {fileID: 2851986956664737072, guid: 38321e2aa34365d45bd077edc02efc78, type: 3}
   weaponRecoil: 2
   weaponStability: 1
-  weaponTimeBetweenShot: 1.5
+  weaponTimeBetweenShot: 0.1
   weaponRange: 10
   weaponMagazineSize: 11
   weaponBulletLeft: 0
   weaponBulletShot: 0
   weaponBulletPerTaps: 1
+  weaponShotType: 0

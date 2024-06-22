@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IMove
 {
+    public void Move(Vector2 inputVector);
     public void Move(Vector3 inputVector);
 }
 public interface ITakeDamage{
