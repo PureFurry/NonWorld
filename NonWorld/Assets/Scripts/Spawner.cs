@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    public static Spawner Instance { get; private set;}
+
     [SerializeField]private List<GameObject> enemyObjectPool;
+    [SerializeField]GameObject bossObject;
     [SerializeField]float createRate,lastCreate;
-    [SerializeField]bool canSpawnable;
+    [SerializeField]public bool canSpawnable;
 
     private void Awake() {
-        
+        Instance = this;
     }
     private void Start() {
         lastCreate = createRate;
@@ -39,7 +42,6 @@ public class Spawner : MonoBehaviour
     }
     public void EnemyCreate(GameObject _enemy){
             Instantiate(_enemy, RandomLocation(), Quaternion.identity);
-        
     }
     public Vector3 RandomLocation(){
         Transform cameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform;
@@ -57,5 +59,8 @@ public class Spawner : MonoBehaviour
     public void AddEnemyToList(GameObject _addEnemy)
     {
         enemyObjectPool.Add(_addEnemy);
+    }
+    public void SpawnBoss(){
+        Instantiate(bossObject, RandomLocation(), Quaternion.identity);
     }
 }

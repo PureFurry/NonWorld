@@ -14,9 +14,9 @@ public class Inventory {
         this.useItemAction = useItemAction;
         itemList = new List<Item>();
 
-        AddItem(new Item { itemType = Item.ItemType.Sword, amount = 1 });
-        AddItem(new Item { itemType = Item.ItemType.HealthPotion, amount = 1 });
-        AddItem(new Item { itemType = Item.ItemType.ManaPotion, amount = 1 });
+        AddItem(new Item { itemType = Item.ItemType.Weapon, amount = 1 });
+        AddItem(new Item { itemType = Item.ItemType.Medkit, amount = 1 });
+        AddItem(new Item { itemType = Item.ItemType.Ammo, amount = 1 });
     }
 
     public void AddItem(Item item) {

@@ -7,11 +7,11 @@ using UnityEngine;
 public class Item {
 
     public enum ItemType {
-        Sword,
-        HealthPotion,
-        ManaPotion,
-        Coin,
+        Weapon,
         Medkit,
+        Ammo,
+        CorruptionCore,
+        Armor,
     }
 
     public ItemType itemType;
@@ -21,34 +21,34 @@ public class Item {
     public Sprite GetSprite() {
         switch (itemType) {
         default:
-        case ItemType.Sword:        return ItemAssets.Instance.swordSprite;
-        case ItemType.HealthPotion: return ItemAssets.Instance.healthPotionSprite;
-        case ItemType.ManaPotion:   return ItemAssets.Instance.manaPotionSprite;
-        case ItemType.Coin:         return ItemAssets.Instance.coinSprite;
-        case ItemType.Medkit:       return ItemAssets.Instance.medkitSprite;
+        case ItemType.Weapon:        return ItemAssets.Instance.weaponSprite;
+        case ItemType.Medkit: return ItemAssets.Instance.medkitSprite;
+        case ItemType.Ammo:   return ItemAssets.Instance.ammoSprite;
+        case ItemType.CorruptionCore:         return ItemAssets.Instance.corruptionCoreSprite;
+        case ItemType.Armor:       return ItemAssets.Instance.armorSprite;
         }
     }
 
     public Color GetColor() {
         switch (itemType) {
         default:
-        case ItemType.Sword:        return new Color(1, 1, 1);
-        case ItemType.HealthPotion: return new Color(1, 0, 0);
-        case ItemType.ManaPotion:   return new Color(0, 0, 1);
-        case ItemType.Coin:         return new Color(1, 1, 0);
-        case ItemType.Medkit:       return new Color(1, 0, 1);
+        case ItemType.Weapon:        return new Color(1, 1, 1);
+        case ItemType.Medkit: return new Color(1, 0, 0);
+        case ItemType.Ammo:   return new Color(0, 0, 1);
+        case ItemType.CorruptionCore:         return new Color(1, 1, 0);
+        case ItemType.Armor:       return new Color(1, 0, 1);
         }
     }
 
     public bool IsStackable() {
         switch (itemType) {
         default:
-        case ItemType.Coin:
-        case ItemType.HealthPotion:
-        case ItemType.ManaPotion:
-            return true;
-        case ItemType.Sword:
+        case ItemType.CorruptionCore:
         case ItemType.Medkit:
+        case ItemType.Ammo:
+            return true;
+        case ItemType.Weapon:
+        case ItemType.Armor:
             return false;
         }
     }

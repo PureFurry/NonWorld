@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour,IMove
 		{
 			GetComponent<PlayerStats>().CurrentStamina -= 1 * Time.deltaTime;
 			UIManager.Instance.UpdateStaminaBar(GetComponent<PlayerStats>().CurrentStamina,GetComponent<PlayerStats>().Stamina);
-			currentMoveSpeed = moveSpeed + 7f;
+			currentMoveSpeed = moveSpeed + 2f;
 		}
 		else {
 			GetComponent<PlayerStats>().CurrentStamina += 1 * Time.deltaTime;

@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a206ad9fe0c780a48a53cfe115ceb123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityData: {fileID: 11400000, guid: 8fd6879b7cb9d924fa42910f96dc876c, type: 2}
   health: 5
   currentHealth: 0
   enemyMoveSpeed: 5

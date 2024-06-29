@@ -82,5 +82,11 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
     {
         throw new System.NotImplementedException();
     }
+    public virtual void FireProjectile(GameObject _fireobject,float _fireSpeed){
 
+    }
+    public virtual void Dash(Vector3 _dashDirection){
+        rb.AddForce(_dashDirection,ForceMode2D.Force);
+
+    }
 }
