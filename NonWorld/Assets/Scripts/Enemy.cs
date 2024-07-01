@@ -6,13 +6,13 @@ using UnityEngine;
 public class Enemy : MonoBehaviour,IMove,ITakeDamage
 {
     [SerializeField] Entity entityData;
-    [SerializeField] float health, currentHealth;
+    [SerializeField]protected float health, currentHealth;
     // [SerializeField] LayerMask targetLayerMask;
-    [SerializeField]private float enemyMoveSpeed;
+    [SerializeField]protected float enemyMoveSpeed;
     GameObject targetPosition;
-    [SerializeField]private float damage;
-    [SerializeField]private int droppedLevelPoint;
-    Rigidbody2D rb;
+    [SerializeField]protected float damage;
+    [SerializeField]protected int droppedLevelPoint;
+    protected Rigidbody2D rb;
 
 
     //Enemy Follow Function
@@ -38,17 +38,17 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
     }
 
 
-    private void Awake() {
+    protected void Awake() {
         currentHealth = entityData.entityHealth;
         enemyMoveSpeed = entityData.entitySpeed;
     }
-    private void Start() {
+    protected void Start() {
         rb = GetComponent<Rigidbody2D>();
     }
 
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         SearchTarget();
     }
@@ -74,6 +74,7 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
         {
             GameManager.Instance.CurroptionCore += entityData.droppedCorrption;
             UIManager.Instance.UpdateCorruption(GameManager.Instance.CurroptionCore);
+            CorruptionDrop(entityData.droppedCorrption,entityData.droppedCorruptionLevel);
             Destroy(this.gameObject);
         }
     }
@@ -88,5 +89,9 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
     public virtual void Dash(Vector3 _dashDirection){
         rb.AddForce(_dashDirection,ForceMode2D.Force);
 
+    }
+    void CorruptionDrop(int _dropAmount,float _levelDropAmount){
+        GameManager.Instance.CurroptionCore += _dropAmount;
+        GameManager.Instance.IncreaseLevelPoint(_levelDropAmount);
     }
 }

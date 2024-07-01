@@ -45,6 +45,8 @@ public class Shooting : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.R) && canFire && canReload)
 		{
 			StartCoroutine(ReloadMagazine());
+			// GetComponentInParent<Animator>().ResetTrigger("Shoot");
+			
 		}
 	}
 	//Shoot Function
@@ -86,9 +88,6 @@ public class Shooting : MonoBehaviour
 		currentMagazineSize = weaponSO.weaponMagazineSize;
 		GetComponentInParent<Animator>().SetTrigger("Reload");
 		yield return new WaitForSeconds(GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).length + GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime);
-		canFire = true;
-		canReload = true;
-		GetComponentInParent<PlayerMovement>().CanMove=true;
 	}
 
 }

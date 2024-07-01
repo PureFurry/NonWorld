@@ -19,18 +19,18 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
         UIManager.Instance.UpdateHealtBar(currentHealth,health);
         if (currentHealth <= 0)
         {
-            if (!firstDeathCheck)
-            {
-                GameObject droppedCore = Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/CorruptedCore.prefab"),this.transform.position,Quaternion.identity);
-                droppedCore.GetComponent<DroppedCorruptedCore>().storedCorruptepCore = GameManager.Instance.CurroptionCore;
-                GameManager.Instance.CurroptionCore = 0;
-                FirstDeathCheck = true;
-                Destroy(this);   
-            }
-            if (firstDeathCheck)
-            {
-                //Burası doldurulacakkk
-            }
+            // if (!firstDeathCheck)
+            // {
+            //     GameObject droppedCore = Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/CorruptedCore.prefab"),this.transform.position,Quaternion.identity);
+            //     droppedCore.GetComponent<DroppedCorruptedCore>().storedCorruptepCore = GameManager.Instance.CurroptionCore;
+            //     GameManager.Instance.CurroptionCore = 0;
+            //     FirstDeathCheck = true;
+            //     Destroy(this);   
+            // }
+            // if (firstDeathCheck)
+            // {
+            //     //Burası doldurulacakkk
+            // }
             Time.timeScale = 0;
         }
     }

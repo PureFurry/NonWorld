@@ -10,6 +10,7 @@ public class Entity : ScriptableObject {
     public float entitySpeed;
     public float entityDamage;
     public int droppedCorrption;
+    public float droppedCorruptionLevel;
     
 }
 
