@@ -1,66 +1,72 @@
-﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Inventory {
+public class Inventory : MonoBehaviour
+{
+    public static Inventory Instance { get; private set; }
+    List<Item> itemList;
+    GameObject loadoutPanel;
+    [SerializeField]bool isInGame;
+    public Item headItem;
+    public Item bodyItem;
+    public WeaponSO weaponItem;
+    [SerializeField] Image headImage;
+    [SerializeField] Image bodyImage;
+    [SerializeField] Image weaponImage;
 
-    public event EventHandler OnItemListChanged;
-
-    private List<Item> itemList;
-    private Action<Item> useItemAction;
-
-    public Inventory(Action<Item> useItemAction) {
-        this.useItemAction = useItemAction;
-        itemList = new List<Item>();
-
-        AddItem(new Item { itemType = Item.ItemType.Weapon, amount = 1 });
-        AddItem(new Item { itemType = Item.ItemType.Medkit, amount = 1 });
-        AddItem(new Item { itemType = Item.ItemType.Ammo, amount = 1 });
-    }
-
-    public void AddItem(Item item) {
-        if (item.IsStackable()) {
-            bool itemAlreadyInInventory = false;
-            foreach (Item inventoryItem in itemList) {
-                if (inventoryItem.itemType == item.itemType) {
-                    inventoryItem.amount += item.amount;
-                    itemAlreadyInInventory = true;
-                }
-            }
-            if (!itemAlreadyInInventory) {
-                itemList.Add(item);
-            }
-        } else {
-            itemList.Add(item);
+    
+    private void Awake() {
+        if (Instance == null)
+        {
+            Instance = this;
         }
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
-
-    public void RemoveItem(Item item) {
-        if (item.IsStackable()) {
-            Item itemInInventory = null;
-            foreach (Item inventoryItem in itemList) {
-                if (inventoryItem.itemType == item.itemType) {
-                    inventoryItem.amount -= item.amount;
-                    itemInInventory = inventoryItem;
-                }
-            }
-            if (itemInInventory != null && itemInInventory.amount <= 0) {
-                itemList.Remove(itemInInventory);
-            }
-        } else {
-            itemList.Remove(item);
+    private void Start() {
+        loadoutPanel = this.gameObject;
+        if (isInGame)
+        {
+            loadoutPanel.SetActive(false);
         }
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        else loadoutPanel.SetActive(true);
+    }
+    private void Update() {
+        if (isInGame)
+        {
+            if (Input.GetKey(KeyCode.I))
+            {
+                if (loadoutPanel.activeSelf == false)
+                {
+                    loadoutPanel.SetActive(true);
+                }
+                else loadoutPanel.SetActive(false);    
+            }
+        }
+        else loadoutPanel.SetActive(true);
+        
+    }
+    
+    
+    public void SetHeadItem(Item _item){
+        headItem = _item;
+        headImage.sprite = _item.ItemSO.itemSprite;
     }
 
-    public void UseItem(Item item) {
-        useItemAction(item);
+    public void SetBodyItem(Item _item){
+        bodyItem = _item;
+        bodyImage.sprite = _item.ItemSO.itemSprite;
+    }
+    public void SetWeapon(WeaponSO _weapon){
+        weaponItem = _weapon;
+        Shooting.Instance.LoadGunData(_weapon);
+        weaponImage.sprite = _weapon.weaponSprite;
     }
 
-    public List<Item> GetItemList() {
+    public void AddItemToList(Item item){
+        itemList.Add(item);
+    }
+    public List<Item> GetItemList(){
         return itemList;
     }
-
 }

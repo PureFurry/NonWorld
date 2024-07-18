@@ -15,7 +15,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log(Mathf.InverseLerp(0f,health,currentHealth));
         UIManager.Instance.UpdateHealtBar(currentHealth,health);
         if (currentHealth <= 0)
         {
@@ -47,13 +46,35 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
         UIManager.Instance.UpdateStaminaBar(CurrentStamina,Stamina);
         GetComponent<PlayerMovement>().MoveSpeed = playerSpeed;
     }
-
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public Vector3 GetPosition(){
         return this.transform.position;
+    }
+    private void OnTriggerEnter2D(Collider2D other) {
+        Item itemWorld = other.GetComponent<Item>();
+        if (itemWorld != null){
+            switch (itemWorld.ItemSO.itemType)
+            {
+                default:
+                InventoryManager.Instance.inventory.AddItemToList(itemWorld.GetItem());
+                itemWorld.DestroySelf();
+                break;
+                case ItemSO.ItemType.AMMOMAGAZINE:
+                GetComponent<PlayerMovement>().weapon.GetComponent<Shooting>().CurrentMagazineAmount++;
+                UIManager.Instance.UpdateMagazine(GetComponent<PlayerMovement>().weapon.GetComponent<Shooting>().CurrentMagazineAmount);
+                itemWorld.DestroySelf();
+                break;
+            }
+            
+        }
+        Weapon weapon = other.GetComponent<Weapon>();
+        if (weapon != null)
+        {
+            if (Shooting.Instance != null)
+            {
+                Shooting.Instance.LoadGunData(weapon.weaponSO);
+                weapon.DestroySelf();   
+            }
+        }
     }
 }

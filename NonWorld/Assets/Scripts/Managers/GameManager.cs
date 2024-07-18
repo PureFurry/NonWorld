@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set;}
     [SerializeField]int corruptionCore;
     int corruptionLevelCounter;
-    float curruptionLevel,currentCorruptionLevel;
+    [SerializeField]float curruptionLevel,currentCorruptionLevel;
     public int CurroptionCore { get => corruptionCore; set => corruptionCore = value; }
 
     private void Awake() {
@@ -26,15 +26,20 @@ public class GameManager : MonoBehaviour
     }
     public void IncreaseLevelPoint(float _increaseAmount){
         currentCorruptionLevel += _increaseAmount;
+        CorruptionLevelManager();
         UIManager.Instance.UpdateCorruptionLevelBar(currentCorruptionLevel, curruptionLevel);
+    }
+    private void Update() {
+       
     }
     public void CorruptionLevelManager(){
         if (currentCorruptionLevel >= curruptionLevel)
         {
             currentCorruptionLevel = 0;
-            float upgradeLevelPerc = curruptionLevel * (2/100);
+            float upgradeLevelPerc = curruptionLevel * 30 / 100;
             curruptionLevel += Mathf.RoundToInt(upgradeLevelPerc);
             corruptionLevelCounter++;
+            Spawner.Instance.spawnAmount += 10;
         }
         if (corruptionLevelCounter == 10)
         {

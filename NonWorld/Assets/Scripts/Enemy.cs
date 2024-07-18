@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
     [SerializeField]protected float damage;
     [SerializeField]protected int droppedLevelPoint;
     protected Rigidbody2D rb;
-
+    bool isLineOfSight;
 
     //Enemy Follow Function
     public void Move(Vector3 inputVector)
@@ -54,12 +54,22 @@ public class Enemy : MonoBehaviour,IMove,ITakeDamage
     }
     void SearchTarget(){
         targetPosition = GameObject.FindGameObjectWithTag("Player");
+        RaycastHit2D ray = Physics2D.Raycast(transform.position, targetPosition.transform.position - transform.position);
         
-        if (targetPosition != null)
+        if (ray.collider != null)
         {
-            Move(targetPosition.transform.position);
-            RotatingToPlayer();
-        }
+            isLineOfSight = ray.collider.CompareTag("Player");
+            if (isLineOfSight)
+            {
+                Debug.DrawRay(transform.position, targetPosition.transform.position - transform.position, Color.green);
+                Move(targetPosition.transform.position);
+                RotatingToPlayer();
+            }
+            else
+            {
+                Debug.DrawRay(transform.position, targetPosition.transform.position - transform.position, Color.red);
+            }
+        } 
     }
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.CompareTag("Player"))

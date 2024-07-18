@@ -17,4 +17,4 @@ MonoBehaviour:
   entitySpeed: 2
   entityDamage: 2
   droppedCorrption: 20
-  droppedCorruptionLevel: 10
+  droppedCorruptionLevel: 50

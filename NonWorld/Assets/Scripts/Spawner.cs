@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -9,7 +11,9 @@ public class Spawner : MonoBehaviour
     [SerializeField]private List<GameObject> enemyObjectPool;
     [SerializeField]GameObject bossObject;
     [SerializeField]float createRate,lastCreate;
+    public int spawnAmount;
     [SerializeField]public bool canSpawnable;
+    int counter;
 
     private void Awake() {
         Instance = this;
@@ -19,26 +23,35 @@ public class Spawner : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.P))
-        {
-            Debug.Log("Spawned");
-            GameObject randomEnemy = enemyObjectPool[Random.Range(0, enemyObjectPool.Count)];
-            EnemyCreate(randomEnemy);
-        }
+        // if (Input.GetKeyUp(KeyCode.P))
+        // {
+        //     Debug.Log("Spawned");
+        //     GameObject randomEnemy = enemyObjectPool[Random.Range(0, enemyObjectPool.Count)];
+        //     EnemyCreate(randomEnemy);
+        // }
+
         if (canSpawnable)
         {
             TimeAfterCreate();
         }
         
     }
+    
     public void TimeAfterCreate(){
-        lastCreate -= Time.deltaTime;
-        if (lastCreate <= 0)
-        {
-            GameObject randomEnemy = enemyObjectPool[Random.Range(0, enemyObjectPool.Count)];
-            EnemyCreate(randomEnemy);
-            lastCreate = createRate;
+        
+        while(counter < spawnAmount){
+            lastCreate -= Time.deltaTime;
+            if (lastCreate <= 0)
+            {
+                GameObject randomEnemy = enemyObjectPool[Random.Range(0, enemyObjectPool.Count)];
+                EnemyCreate(randomEnemy);
+                lastCreate = createRate;
+                counter++;
+            }
         }
+    }
+    void ResetCounter(){
+        counter = 0;
     }
     public void EnemyCreate(GameObject _enemy){
             Instantiate(_enemy, RandomLocation(), Quaternion.identity);

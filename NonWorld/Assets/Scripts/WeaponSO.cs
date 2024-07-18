@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 
 
-[CreateAssetMenu(fileName = "WeaponSO", menuName = "ScriptalbeObjects/WeaponSO", order = 1)]
+[CreateAssetMenu(fileName = "WeaponSO", menuName = "ScriptableObjects/WeaponSO", order = 1)]
 public class WeaponSO : ScriptableObject
 {
     public string weaponName;
@@ -20,6 +20,8 @@ public class WeaponSO : ScriptableObject
     public int weaponBulletShot;
     public int weaponBulletPerTaps;
     public WeaponShotType weaponShotType;
+    public AudioClip fireSound;
+    public AudioClip reloadSound;
 }
 public enum WeaponShotType{
     SINGLE,

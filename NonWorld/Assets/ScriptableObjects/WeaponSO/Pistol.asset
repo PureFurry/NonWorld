@@ -24,3 +24,5 @@ MonoBehaviour:
   weaponBulletShot: 0
   weaponBulletPerTaps: 1
   weaponShotType: 0
+  fireSound: {fileID: 8300000, guid: 36e067d8d01bda843961b6ed04d8f4bd, type: 3}
+  reloadSound: {fileID: 8300000, guid: 826332f5c3c685449b7f57b139ffc79f, type: 3}

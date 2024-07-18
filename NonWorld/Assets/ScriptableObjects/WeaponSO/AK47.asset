@@ -17,10 +17,12 @@ MonoBehaviour:
   weaponBullet: {fileID: 2851986956664737072, guid: 38321e2aa34365d45bd077edc02efc78, type: 3}
   weaponRecoil: 0.2
   weaponStability: 2
-  weaponTimeBetweenShot: 0.1
+  weaponTimeBetweenShot: 0.2
   weaponRange: 30
   weaponMagazineSize: 30
   weaponBulletLeft: 0
   weaponBulletShot: 0
   weaponBulletPerTaps: 1
   weaponShotType: 1
+  fireSound: {fileID: 8300000, guid: f5ccd18604dde2145be60864de5cb8fa, type: 3}
+  reloadSound: {fileID: 8300000, guid: 826332f5c3c685449b7f57b139ffc79f, type: 3}

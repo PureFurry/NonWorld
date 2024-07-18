@@ -10,12 +10,11 @@ public class PlayerMovement : MonoBehaviour,IMove
 	
 	Rigidbody2D playerRb2d;
 	public Camera cam;
-	[SerializeField]GameObject weapon;
+	[SerializeField]public GameObject weapon;
 
 	Vector2 movement;
 	Vector2  mousePos;
 	PlayerStats playerStats;
-	
 	[SerializeField]bool canMove = true, isRunning;
 	
 
@@ -23,11 +22,15 @@ public class PlayerMovement : MonoBehaviour,IMove
     public bool CanMove { get => canMove; set => canMove = value; }
     public bool IsRunning { get => isRunning;}
 
+	private void Awake() {
+	}
+
     private void Start() {
 		playerRb2d = GetComponent<Rigidbody2D>();
 		playerStats = GetComponent<PlayerStats>();
 		Cursor.visible = false;
 		currentMoveSpeed = moveSpeed;
+		
 
 	}
 
@@ -47,19 +50,25 @@ public class PlayerMovement : MonoBehaviour,IMove
 			GetComponent<PlayerStats>().CurrentStamina -= 1 * Time.deltaTime;
 			UIManager.Instance.UpdateStaminaBar(GetComponent<PlayerStats>().CurrentStamina,GetComponent<PlayerStats>().Stamina);
 			currentMoveSpeed = moveSpeed + 2f;
+			GetComponent<AudioSource>().pitch = 1.5f;
 		}
 		else {
 			GetComponent<PlayerStats>().CurrentStamina += 1 * Time.deltaTime;
 			UIManager.Instance.UpdateStaminaBar(GetComponent<PlayerStats>().CurrentStamina,GetComponent<PlayerStats>().Stamina);
 			currentMoveSpeed = moveSpeed;
+			GetComponent<AudioSource>().pitch = 1f;
 		}
-		if (isRunning)
+		if (isRunning && weapon.GetComponent<Shooting>().canFire)
 		{
 			weapon.SetActive(false);
 		}
 		if (!isRunning)
 		{
 			weapon.SetActive(true);
+		}
+		if (Input.GetKeyDown(KeyCode.F))
+		{
+			GetComponent<AudioSource>().Play();
 		}
 	}
 
@@ -84,17 +93,18 @@ public class PlayerMovement : MonoBehaviour,IMove
 		{
 			isRunning = true;
 			GetComponent<Animator>().SetBool("Run",isRunning);
+			GetComponent<AudioSource>().enabled = true;
 		}
 		else
 		{
 			isRunning = false;
 			GetComponent<Animator>().SetBool("Run",isRunning);
+			GetComponent<AudioSource>().enabled = false;
 		}
         // Movement
 		//rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);	
 		// playerRb2d.velocity = inputVector.normalized * moveSpeed;
     }
-
     public void Move(Vector3 inputVector)
     {
         throw new System.NotImplementedException();
